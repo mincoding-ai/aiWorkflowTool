@@ -1,0 +1,87 @@
+/* Design Ref: §8 — 전역 레이아웃 (header/main/panel flex) */
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+}
+
+.app {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.app-header {
+  height: 52px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 16px;
+  background: #1e293b;
+  color: #f8fafc;
+  flex-shrink: 0;
+}
+
+.app-header h1 {
+  font-size: 17px;
+  font-weight: 600;
+}
+
+.app-header-meta {
+  font-size: 13px;
+  color: #94a3b8;
+  margin-left: auto;
+}
+
+.app-header-reset {
+  padding: 4px 12px;
+  background: transparent;
+  color: #94a3b8;
+  border: 1px solid #475569;
+  border-radius: 4px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: color 0.1s, border-color 0.1s;
+}
+
+.app-header-reset:hover {
+  color: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.app-body {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Design Ref: §11.2 — React Flow 컨테이너 height: 100% 필수 (flex: 1 조합) */
+.graph-area {
+  flex: 1;
+  height: 100%;
+}
+
+/* Design Ref: §8 */
+.detail-panel {
+  width: 280px;
+  overflow-y: auto;
+  border-left: 1px solid #e5e7eb;
+  background: #fafafa;
+  flex-shrink: 0;
+}
+
+.graph-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  font-size: 14px;
+  color: #9ca3af;
+}

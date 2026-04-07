@@ -1,0 +1,6 @@
+.env
+__pycache__/
+*.py[cod]
+*.bak
+.pytest_cache/
+_ai_analysis/

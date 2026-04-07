@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.bak
+.pytest_cache/
+_ai_analysis/
+.env
+
+# Node.js
+node_modules/
+dist/
+
+# IDE
+.vscode/
+.idea/
+
+# Dev tools (로컬 전용)
+.bkit/
+.claude/

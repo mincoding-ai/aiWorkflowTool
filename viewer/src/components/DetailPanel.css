@@ -1,0 +1,94 @@
+.dp-root {
+  padding: 16px;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.dp-hint {
+  font-size: 14px;
+  color: #9ca3af;
+  line-height: 1.6;
+}
+
+.dp-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.dp-name {
+  font-size: 18px;
+  font-weight: 700;
+  color: #111827;
+  margin-bottom: 4px;
+  word-break: break-all;
+}
+
+.dp-sublabel {
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 16px;
+}
+
+.dp-section {
+  border-top: 1px solid #e5e7eb;
+  padding-top: 12px;
+  margin-top: 4px;
+  margin-bottom: 4px;
+}
+
+.dp-section-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 8px;
+}
+
+.dp-purpose {
+  font-size: 14px;
+  color: #374151;
+  line-height: 1.65;
+}
+
+.dp-edges {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dp-edge-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  font-size: 13px;
+}
+
+.dp-edge-dir {
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.dp-edge-dir--out {
+  color: #4F6EF7;
+}
+
+.dp-edge-dir--in {
+  color: #10b981;
+}
+
+.dp-edge-target {
+  font-weight: 600;
+  color: #111827;
+  flex-shrink: 0;
+}
+
+.dp-edge-relation {
+  color: #6b7280;
+}
