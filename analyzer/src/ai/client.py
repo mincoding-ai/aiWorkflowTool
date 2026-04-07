@@ -48,7 +48,7 @@ class AIClient:
         Returns:
             (prd_text, design_text) 튜플
         """
-        prompt = PROMPT_OVERVIEW.format(file_contents=file_contents)
+        prompt = PROMPT_OVERVIEW.replace("{file_contents}", file_contents)
         response = self._call(prompt, max_tokens=4096)
         return self._parse_overview(response)
 
@@ -69,10 +69,11 @@ class AIClient:
         Returns:
             (commented_source, purpose_one_line) 튜플
         """
-        prompt = PROMPT_COMMENT.format(
-            prd_content=prd_content,
-            design_content=design_content,
-            class_source=class_source,
+        prompt = (
+            PROMPT_COMMENT
+            .replace("{prd_content}", prd_content)
+            .replace("{design_content}", design_content)
+            .replace("{class_source}", class_source)
         )
         response = self._call(prompt, max_tokens=4096)
         return self._parse_comment_response(response)
@@ -90,9 +91,10 @@ class AIClient:
         Returns:
             [{"id": ..., "label": ..., "purpose": ...}] 형태의 리스트
         """
-        prompt = PROMPT_GRAPH_NODES.format(
-            analysis_content=analysis_content,
-            design_content=design_content,
+        prompt = (
+            PROMPT_GRAPH_NODES
+            .replace("{analysis_content}", analysis_content)
+            .replace("{design_content}", design_content)
         )
         response = self._call(prompt, max_tokens=2048)
         return self._parse_json_response(response)
@@ -123,6 +125,24 @@ class AIClient:
     # Private: API 호출 + 파싱
     # ──────────────────────────────────────────────
 
+    @staticmethod
+    def _sanitize(text: str) -> str:
+        """
+        JSON 직렬화 불가 문자를 제거한다.
+        null 바이트·잘못된 유니코드(lone surrogate)는 OpenAI API가 JSON 파싱 오류를 낸다.
+
+        Args:
+            text: 정제할 문자열
+
+        Returns:
+            null 바이트 및 제어문자가 제거된 문자열
+        """
+        # null 바이트 제거
+        text = text.replace('\x00', '')
+        # 잘못된 유니코드(lone surrogate 등) → 대체 문자로 교체
+        text = text.encode('utf-8', errors='replace').decode('utf-8')
+        return text
+
     def _call(self, prompt: str, max_tokens: int = 4096) -> str:
         """
         OpenAI Chat Completions API를 호출한다.
@@ -138,6 +158,7 @@ class AIClient:
         Raises:
             RuntimeError: 최대 재시도 횟수 초과 시
         """
+        prompt = self._sanitize(prompt)
         last_error: Exception | None = None
 
         for attempt in range(self.MAX_RETRIES):

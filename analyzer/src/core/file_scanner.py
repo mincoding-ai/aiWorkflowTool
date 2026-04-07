@@ -9,6 +9,8 @@ _TOKEN_LIMIT = 80_000
 _CHARS_PER_TOKEN = 4
 # 토큰 초과 시 파일당 추출할 최대 줄 수
 _SUMMARY_HEAD_LINES = 50
+# 요약 후에도 초과 시 적용할 최대 총 문자 수 (프롬프트 오버헤드 고려, ~70k 토큰)
+_MAX_COMBINED_CHARS = 70_000 * _CHARS_PER_TOKEN  # 280,000
 
 # 지원 언어별 확장자
 SUPPORTED_EXTENSIONS: tuple[str, ...] = (
@@ -103,6 +105,7 @@ class FileScanner:
     def _summarize(self, files: dict[str, str]) -> dict[str, str]:
         """
         각 파일에서 첫 N줄 + 함수·클래스 시그니처만 추출하여 반환한다.
+        요약 후에도 총량이 _MAX_COMBINED_CHARS를 초과하면 파일당 균등 절삭한다.
 
         Args:
             files: {파일경로: 전체내용} 딕셔너리
@@ -113,6 +116,16 @@ class FileScanner:
         summarized: dict[str, str] = {}
         for file_path, content in files.items():
             summarized[file_path] = self._extract_summary(content)
+
+        # 2차 절삭: 요약 후에도 총량 초과 시 파일당 균등 예산 적용
+        total = sum(len(v) for v in summarized.values())
+        if total > _MAX_COMBINED_CHARS and summarized:
+            per_file_budget = max(100, _MAX_COMBINED_CHARS // len(summarized))
+            summarized = {
+                p: (v[:per_file_budget] + "\n[...생략...]" if len(v) > per_file_budget else v)
+                for p, v in summarized.items()
+            }
+
         return summarized
 
     def _extract_summary(self, source: str) -> str:
